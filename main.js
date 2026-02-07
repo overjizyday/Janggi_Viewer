@@ -78,7 +78,7 @@
         "초마": "./assets/초마.svg",
         "초상": "./assets/초상.svg",
         "초사": "./assets/초사.svg",
-        "초장": "./assets/초장.svg",
+        "초장": "./assets/초궁.svg",
         "초포": "./assets/초포.svg",
         "초졸": "./assets/초졸.svg",
 
@@ -86,9 +86,9 @@
         "한마": "./assets/한마.svg",
         "한상": "./assets/한상.svg",
         "한사": "./assets/한사.svg",
-        "한장": "./assets/한장.svg",
+        "한장": "./assets/한궁.svg",
         "한포": "./assets/한포.svg",
-        "한졸": "./assets/한졸.svg",
+        "한졸": "./assets/한병.svg",
     };
 
     // Snapshot-based state
