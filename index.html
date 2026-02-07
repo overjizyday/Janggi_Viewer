@@ -8,65 +8,75 @@
 </head>
 <body>
     <main class="app">
-        <header class="top">
-            <div class="title">
-                <h1>장기 기보 뷰어</h1>
-                <p class="subtitle">URL 파라미터로 기보를 받아 리플레이합니다. (GitHub Pages / 티스토리 iframe)</p>
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand__title">장기 기보 뷰어</div>
+                <div class="brand__sub" id="subtitle">URL 파라미터로 기보를 불러옵니다</div>
             </div>
+            <button class="btn btn--ghost" id="btnReload" type="button" title="URL 파라미터 다시 읽기">
+                새로고침
+            </button>
         </header>
 
         <section class="stage">
-            <div class="board-wrap" aria-label="장기판">
-                <!-- 반응형 보드: 9x10 격자. 실제 렌더링은 절대좌표 레이어로 구성 -->
-                <div id="board" class="board" role="img" aria-label="장기판 및 기물">
-                    <div class="grid-layer" aria-hidden="true"></div>
+            <div class="boardCard">
+                <div class="boardWrap" id="boardWrap" aria-label="장기판">
+                    <!-- 보드(선/텍스트) -->
+                    <svg class="boardSvg" id="boardSvg" viewBox="0 0 1000 1100" aria-hidden="true">
+                        <!-- wood background is done via CSS on .boardWrap -->
+                        <defs>
+                            <filter id="shadowSoft" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.22" />
+                            </filter>
+                        </defs>
 
-                    <!-- 하이라이트: 말 아래에 깔리도록 pieces-layer 보다 먼저 -->
-                    <div id="hlLayer" class="highlight-layer" aria-hidden="true"></div>
+                        <!-- inner frame -->
+                        <rect id="frameRect" x="70" y="70" width="860" height="960" rx="24" ry="24" class="boardFrame" filter="url(#shadowSoft)"></rect>
 
-                    <!-- 기물 -->
-                    <div id="piecesLayer" class="pieces-layer" aria-hidden="true"></div>
-                    
-                </div>
-            </div>
+                        <!-- grid + palace are drawn by JS by updating lines/labels using this svg -->
+                        <g id="gridLayer"></g>
+                        <g id="labelLayer"></g>
+                    </svg>
 
-            <div class="panel">
-                <div class="controls" role="group" aria-label="기보 이동">
-                    <button id="btnFirst" class="btn" title="맨앞 (⏮)" aria-label="맨앞">⏮</button>
-                    <button id="btnPrev" class="btn" title="뒤로 (⏪)" aria-label="뒤로">⏪</button>
-                    <button id="btnNext" class="btn" title="앞으로 (⏩)" aria-label="앞으로">⏩</button>
-                    <button id="btnLast" class="btn" title="맨뒤 (⏭)" aria-label="맨뒤">⏭</button>
-                </div>
-
-                <div class="status">
-                    <div class="row">
-                        <div id="plyText" class="pill">0/0</div>
-                        <div id="moveText" class="pill mono">-</div>
+                    <!-- 하이라이트(말 아래) -->
+                    <div class="hlLayer" id="hlLayer" aria-hidden="true">
+                        <div class="hlDot" id="hlFrom" hidden></div>
+                        <div class="hlDot" id="hlTo" hidden></div>
                     </div>
-                    <div class="row">
-                        <div id="spText" class="pill">sp: -</div>
-                        <div id="endBadge" class="badge hidden">결과</div>
-                    </div>
+
+                    <!-- 말 레이어 -->
+                    <div class="pieceLayer" id="pieceLayer" aria-label="기물"></div>
                 </div>
 
-                <div id="message" class="message hidden" role="alert"></div>
+                <div class="panel">
+                    <div class="controls" role="group" aria-label="재생 컨트롤">
+                        <button class="btn" id="btnFirst" type="button" title="맨앞">⏮</button>
+                        <button class="btn" id="btnPrev" type="button" title="뒤로">⏪</button>
+                        <button class="btn" id="btnNext" type="button" title="앞으로">⏩</button>
+                        <button class="btn" id="btnLast" type="button" title="맨뒤">⏭</button>
+                    </div>
 
-                <details class="help">
-                    <summary>도움말</summary>
-                    <ul>
-                        <li><span class="mono">sp</span>: 초/한의 마·상 배치를 결정 (예: <span class="mono">44</span>)</li>
-                        <li><span class="mono">pgn</span>: 4글자=한 수. 예: <span class="mono">e5d5e6d6</span></li>
-                        <li><span class="mono">0000</span>: 패스(쉼). 이 경우 하이라이트는 숨깁니다.</li>
-                    </ul>
-                </details>
+                    <div class="status">
+                        <div class="status__row">
+                            <span class="pill" id="plyPill">0/0</span>
+                            <span class="mono" id="moveText">-</span>
+                        </div>
+                        <div class="status__row">
+                            <span class="badge" id="endBadge" hidden></span>
+                            <span class="hint" id="hintText">예: ?sp=44&pgn=e5d5e6d6&end=white-checkmate</span>
+                        </div>
+                    </div>
+
+                    <div class="msg" id="msgBox" hidden></div>
+                </div>
             </div>
         </section>
 
-        <footer class="foot">
-            <p class="muted">정적 웹앱 · 외부 라이브러리 없음 · 이미지: <span class="mono">/assets</span></p>
+        <footer class="footer">
+            <span class="footer__muted">Pure HTML/CSS/JS · GitHub Pages 배포용</span>
         </footer>
     </main>
 
-    <script src="./main.js" defer></script>
+    <script src="./main.js"></script>
 </body>
 </html>
