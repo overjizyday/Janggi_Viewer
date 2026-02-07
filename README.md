@@ -1,0 +1,228 @@
+﻿# 장기 기보 뷰어 (GitHub Pages / 티스토리 iframe)
+
+URL 파라미터로 **시작 배치(sp)**, **기보(pgn)**, **경기 결과(end)** 를 받아서 장기판에 재생하는 **정적 웹앱**입니다.  
+외부 라이브러리/CDN 의존 없이 **순수 HTML/CSS/JS**만 사용합니다. (이미지는 `/assets`에서 로드)
+
+---
+
+## 1) 파일 구조
+
+아래 구조 그대로 레포에 넣으면 됩니다.
+
+- index.html
+- style.css
+- main.js
+- README.md
+- assets/
+  - board/
+    - wood.png
+  - pieces/
+    - cho_cha.png
+    - cho_ma.png
+    - cho_sang.png
+    - cho_sa.png
+    - cho_jang.png
+    - cho_po.png
+    - cho_byung.png
+    - han_cha.png
+    - han_ma.png
+    - han_sang.png
+    - han_sa.png
+    - han_jang.png
+    - han_po.png
+    - han_jol.png
+
+> 주의: 실제 이미지 파일은 이 레포에 직접 업로드해야 합니다.  
+> 이미지가 누락되면 앱이 크래시하지 않도록 fallback 텍스트 원형으로 표시됩니다.
+
+---
+
+## 2) URL 파라미터 스펙
+
+### sp (필수 권장)
+- 두 자리 숫자 문자열 (예: "44")
+- 첫 번째 숫자(1~4): 초(위쪽)의 마/상 배치 유형
+- 두 번째 숫자(1~4): 한(아래쪽)의 마/상 배치 유형
+
+각 숫자 의미:
+
+- 1 = 마상상마
+- 2 = 마상마상
+- 3 = 상마상마
+- 4 = 상마마상
+
+이 sp는 “초/한의 마/상 4개 말이 시작 배치에서 어느 파일에 놓이는지”를 결정합니다.  
+구현에서는 백랭크의 b,c,g,h 파일(총 4칸)에 마/상이 어떤 순서로 들어가는지 결정합니다.
+
+---
+
+### pgn (선택)
+- 문자열, 4글자 = 한 수
+- 예: `e5d5e6d6` 는 2수
+  - e5 → d5
+  - e6 → d6
+
+#### 좌표 체계 (a1~i10)
+- 파일(file): a~i (좌→우)
+- 랭크(rank): 1~10 (아래(한)→위(초))
+
+중요: 2글자 좌표를 유지하기 위한 랭크 표기 규칙(이 프로젝트의 인코딩 규칙)
+
+- 1~9는 그대로 1..9
+- 10은 0으로 표기합니다.
+  - 예: e10은 e0
+  - a10은 a0
+
+즉, 한 칸은 항상 2글자: [파일 1글자][랭크 1글자]
+
+---
+
+### 특수 수: 0000 (패스/쉼)
+- "0000"은 한 수 쉼(패스)입니다.
+- 이 구현에서는 패스일 때 마지막 이동 하이라이트를 숨깁니다.
+
+---
+
+### end (선택)
+경기 결과 표시용 문자열입니다. 있으면 보드 아래가 아니라 패널에 결과 배지로 표시합니다.
+
+- 예: white-checkmate, black-timewin, resign 등
+- 알려진 값이면 한국어로 매핑 표시:
+  - white-checkmate → 한 승(체크메이트)
+  - black-checkmate → 초 승(체크메이트)
+  - white-timewin → 한 승(시간승)
+  - black-timewin → 초 승(시간승)
+  - resign → 기권
+  - draw → 무승부
+- 알 수 없는 값이면 그대로 출력합니다.
+
+---
+
+## 3) 기능
+
+- 4버튼: ⏮(맨앞), ⏪(뒤로), ⏩(앞으로), ⏭(맨뒤)
+- 진행 표시:
+  - 현재 ply/총 ply
+  - 현재 수의 원문(e5→d5 형태) 또는 패스(0000)
+- 마지막 이동 하이라이트:
+  - 출발칸/도착칸 중심에 노란 반투명 원 2개
+  - 말 아래 레이어에 깔리도록 구성
+  - 0000(패스)이면 하이라이트 숨김
+- 오류/경고 처리:
+  - pgn 길이 오류, 좌표 오류 등은 메시지로 표시 (크래시 금지)
+  - from에 말이 없으면 그 수는 무시 + 경고 표시
+- 캡처:
+  - to에 상대 말이 있으면 덮어써서 제거
+- 되돌리기:
+  - 스냅샷 배열 방식으로 각 ply의 보드 상태를 저장 → 완벽 복구
+
+규칙 검증(합법 수 판단)은 필수 아님(리뷰 목적). 이 앱은 “이동 기록 재생”에 집중합니다.
+
+---
+
+## 4) 로컬 테스트 방법
+
+정적 리소스(이미지) 로딩 때문에 file:// 로 열면 경로 문제가 날 수 있습니다.  
+아래처럼 로컬 서버로 테스트하세요.
+
+### 방법 A) Python
+```bash
+python -m http.server 8000
+브라우저에서 아래 주소로 접속:
+
+* [http://localhost:8000/](http://localhost:8000/)
+
+### 방법 B) VSCode Live Server
+
+1. VSCode 확장: Live Server 설치
+2. index.html 우클릭 → Open with Live Server
+
+---
+
+## 5) URL 예시
+
+* 기본:
+
+  * `/?sp=44&pgn=e5d5e6d6`
+
+* 패스 포함:
+
+  * `/?sp=12&pgn=e5d50000e6d6`
+
+* 랭크 10 사용 (10은 0으로 표기):
+
+  * 예: e0e9 는 e10 → e9
+  * `/?sp=44&pgn=e0e9`
+
+* 결과 배지 포함:
+
+  * `/?sp=44&pgn=e5d5e6d6&end=white-checkmate`
+
+---
+
+## 6) GitHub Pages 배포 방법
+
+1. GitHub에서 새 레포 생성 (예: janggi-viewer)
+2. 이 프로젝트 파일을 그대로 커밋/푸시
+
+git add .
+git commit -m "Add janggi viewer"
+git push
+
+3. GitHub 레포 → Settings → Pages
+4. Build and deployment
+
+Source: Deploy from a branch
+Branch: main (또는 master), 폴더: /(root)
+
+5. 저장 후 Pages URL 확인:
+   `https://USERNAME.github.io/REPO/`
+
+---
+
+## 7) 티스토리 iframe 삽입 예시
+
+티스토리 글 HTML 모드에서:
+
+<iframe
+  src="https://USERNAME.github.io/REPO/?sp=44&pgn=e5d5e6d6&end=white-checkmate"
+  width="560"
+  height="720"
+  frameborder="0"></iframe>
+
+모바일에서 잘 보이게 하려면 width를 100%로 두고 높이를 충분히 주는 것도 좋습니다.
+
+<iframe
+  src="https://USERNAME.github.io/REPO/?sp=44&pgn=e5d5e6d6"
+  style="width:100%; height:720px; border:0;"></iframe>
+
+---
+
+## 8) 기물/보드 이미지 교체 방법
+
+1. assets/board/wood.png 를 원하는 나무 텍스처로 교체
+2. assets/pieces/ 아래 파일명을 동일하게 유지하면서 교체
+
+예: han_cha.png를 바꾸면 한나라 차 이미지가 바뀜
+
+png 대신 webp를 쓰고 싶다면:
+
+* 파일 확장자를 .webp로 바꾸고
+* main.js의 pieceToAsset() 반환 경로 확장자도 함께 변경하세요.
+
+---
+
+## 9) 커스터마이징 포인트
+
+* 보드 격자/궁성선: style.css의 .grid-layer, .board::before 수정
+* 하이라이트 크기/색: .hl 수정
+* 버튼/패널 스타일: .panel, .btn, .pill 수정
+
+---
+
+## 10) 안전한 파싱/경고 정책
+
+* 좌표 오류(예: z9a1) → 경고 표시, 해당 수는 무효로 기록
+* from에 말 없음 → 경고 표시, 그 수는 적용하지 않음
+* 캡처는 단순 덮어쓰기
+* 스냅샷 복구로 되돌리기 완전 지원
