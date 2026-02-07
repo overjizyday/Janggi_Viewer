@@ -14,21 +14,20 @@ URL 파라미터로 **시작 배치(sp)**, **기보(pgn)**, **경기 결과(end)
 - main.js
 - README.md
 - assets/
-  - pieces/
-    - 초차.svg
-    - 초마.svg
-    - 초상.svg
-    - 초사.svg
-    - 초궁.svg
-    - 초포.svg
-    - 초졸.svg
-    - 한차.svg
-    - 한마.svg
-    - 한상.svg
-    - 한사.svg
-    - 한장.svg
-    - 한포.svg
-    - 한병.svg
+  - 초차.svg
+  - 초마.svg
+  - 초상.svg
+  - 초사.svg
+  - 초궁.svg
+  - 초포.svg
+  - 초졸.svg
+  - 한차.svg
+  - 한마.svg
+  - 한상.svg
+  - 한사.svg
+  - 한장.svg
+  - 한포.svg
+  - 한병.svg
 
 > 주의: 실제 이미지 파일은 이 레포에 직접 업로드해야 합니다.  
 > 이미지가 누락되면 앱이 크래시하지 않도록 fallback 텍스트 원형으로 표시됩니다.
