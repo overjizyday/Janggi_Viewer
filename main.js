@@ -202,7 +202,7 @@
         place(board, H, R1, { side: "han", type: hanPattern[3] });
         // palace pieces
         place(board, D, R1, { side: "han", type: "sa" });
-        place(board, E, R1, { side: "han", type: "jang" });
+        place(board, E, R2, { side: "han", type: "jang" });
         place(board, F, R1, { side: "han", type: "sa" });
 
         // Han cannons (po): b3/h3 => rank 3 index 2
@@ -220,7 +220,7 @@
         place(board, G, R10, { side: "cho", type: choPattern[2] });
         place(board, H, R10, { side: "cho", type: choPattern[3] });
         place(board, D, R10, { side: "cho", type: "sa" });
-        place(board, E, R10, { side: "cho", type: "jang" });
+        place(board, E, R9, { side: "cho", type: "jang" });
         place(board, F, R10, { side: "cho", type: "sa" });
 
         // Cho cannons (po): b8/h8 => rank 8 index 7
