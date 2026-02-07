@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>장기 기보 뷰어</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+    <main class="app">
+        <header class="top">
+            <div class="title">
+                <h1>장기 기보 뷰어</h1>
+                <p class="subtitle">URL 파라미터로 기보를 받아 리플레이합니다. (GitHub Pages / 티스토리 iframe)</p>
+            </div>
+        </header>
+
+        <section class="stage">
+            <div class="board-wrap" aria-label="장기판">
+                <!-- 반응형 보드: 9x10 격자. 실제 렌더링은 절대좌표 레이어로 구성 -->
+                <div id="board" class="board" role="img" aria-label="장기판 및 기물">
+                    <div class="grid-layer" aria-hidden="true"></div>
+
+                    <!-- 하이라이트: 말 아래에 깔리도록 pieces-layer 보다 먼저 -->
+                    <div id="hlLayer" class="highlight-layer" aria-hidden="true"></div>
+
+                    <!-- 기물 -->
+                    <div id="piecesLayer" class="pieces-layer" aria-hidden="true"></div>
+
+                    <!-- 중앙 초하/한계 텍스트 -->
+                    <div class="river-label" aria-hidden="true">
+                        <span class="cho">楚河</span>
+                        <span class="han">漢界</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="controls" role="group" aria-label="기보 이동">
+                    <button id="btnFirst" class="btn" title="맨앞 (⏮)" aria-label="맨앞">⏮</button>
+                    <button id="btnPrev" class="btn" title="뒤로 (⏪)" aria-label="뒤로">⏪</button>
+                    <button id="btnNext" class="btn" title="앞으로 (⏩)" aria-label="앞으로">⏩</button>
+                    <button id="btnLast" class="btn" title="맨뒤 (⏭)" aria-label="맨뒤">⏭</button>
+                </div>
+
+                <div class="status">
+                    <div class="row">
+                        <div id="plyText" class="pill">0/0</div>
+                        <div id="moveText" class="pill mono">-</div>
+                    </div>
+                    <div class="row">
+                        <div id="spText" class="pill">sp: -</div>
+                        <div id="endBadge" class="badge hidden">결과</div>
+                    </div>
+                </div>
+
+                <div id="message" class="message hidden" role="alert"></div>
+
+                <details class="help">
+                    <summary>도움말</summary>
+                    <ul>
+                        <li><span class="mono">sp</span>: 초/한의 마·상 배치를 결정 (예: <span class="mono">44</span>)</li>
+                        <li><span class="mono">pgn</span>: 4글자=한 수. 예: <span class="mono">e5d5e6d6</span></li>
+                        <li><span class="mono">0000</span>: 패스(쉼). 이 경우 하이라이트는 숨깁니다.</li>
+                    </ul>
+                </details>
+            </div>
+        </section>
+
+        <footer class="foot">
+            <p class="muted">정적 웹앱 · 외부 라이브러리 없음 · 이미지: <span class="mono">/assets</span></p>
+        </footer>
+    </main>
+
+    <script src="./main.js" defer></script>
+</body>
+</html>
