@@ -14,23 +14,21 @@ URL 파라미터로 **시작 배치(sp)**, **기보(pgn)**, **경기 결과(end)
 - main.js
 - README.md
 - assets/
-  - board/
-    - wood.png
   - pieces/
-    - cho_cha.png
-    - cho_ma.png
-    - cho_sang.png
-    - cho_sa.png
-    - cho_jang.png
-    - cho_po.png
-    - cho_byung.png
-    - han_cha.png
-    - han_ma.png
-    - han_sang.png
-    - han_sa.png
-    - han_jang.png
-    - han_po.png
-    - han_jol.png
+    - 초차.svg
+    - 초마.svg
+    - 초상.svg
+    - 초사.svg
+    - 초궁.svg
+    - 초포.svg
+    - 초졸.svg
+    - 한차.svg
+    - 한마.svg
+    - 한상.svg
+    - 한사.svg
+    - 한장.svg
+    - 한포.svg
+    - 한병.svg
 
 > 주의: 실제 이미지 파일은 이 레포에 직접 업로드해야 합니다.  
 > 이미지가 누락되면 앱이 크래시하지 않도록 fallback 텍스트 원형으로 표시됩니다.
@@ -120,26 +118,7 @@ URL 파라미터로 **시작 배치(sp)**, **기보(pgn)**, **경기 결과(end)
 
 ---
 
-## 4) 로컬 테스트 방법
-
-정적 리소스(이미지) 로딩 때문에 file:// 로 열면 경로 문제가 날 수 있습니다.  
-아래처럼 로컬 서버로 테스트하세요.
-
-### 방법 A) Python
-```bash
-python -m http.server 8000
-브라우저에서 아래 주소로 접속:
-
-* [http://localhost:8000/](http://localhost:8000/)
-
-### 방법 B) VSCode Live Server
-
-1. VSCode 확장: Live Server 설치
-2. index.html 우클릭 → Open with Live Server
-
----
-
-## 5) URL 예시
+## 4) URL 예시
 
 * 기본:
 
@@ -160,29 +139,10 @@ python -m http.server 8000
 
 ---
 
-## 6) GitHub Pages 배포 방법
 
-1. GitHub에서 새 레포 생성 (예: janggi-viewer)
-2. 이 프로젝트 파일을 그대로 커밋/푸시
+## 5) iframe 삽입 예시
 
-git add .
-git commit -m "Add janggi viewer"
-git push
-
-3. GitHub 레포 → Settings → Pages
-4. Build and deployment
-
-Source: Deploy from a branch
-Branch: main (또는 master), 폴더: /(root)
-
-5. 저장 후 Pages URL 확인:
-   `https://USERNAME.github.io/REPO/`
-
----
-
-## 7) 티스토리 iframe 삽입 예시
-
-티스토리 글 HTML 모드에서:
+HTML 모드에서:
 
 <iframe
   src="https://USERNAME.github.io/REPO/?sp=44&pgn=e5d5e6d6&end=white-checkmate"
@@ -198,29 +158,7 @@ Branch: main (또는 master), 폴더: /(root)
 
 ---
 
-## 8) 기물/보드 이미지 교체 방법
-
-1. assets/board/wood.png 를 원하는 나무 텍스처로 교체
-2. assets/pieces/ 아래 파일명을 동일하게 유지하면서 교체
-
-예: han_cha.png를 바꾸면 한나라 차 이미지가 바뀜
-
-png 대신 webp를 쓰고 싶다면:
-
-* 파일 확장자를 .webp로 바꾸고
-* main.js의 pieceToAsset() 반환 경로 확장자도 함께 변경하세요.
-
----
-
-## 9) 커스터마이징 포인트
-
-* 보드 격자/궁성선: style.css의 .grid-layer, .board::before 수정
-* 하이라이트 크기/색: .hl 수정
-* 버튼/패널 스타일: .panel, .btn, .pill 수정
-
----
-
-## 10) 안전한 파싱/경고 정책
+## 6) 안전한 파싱/경고 정책
 
 * 좌표 오류(예: z9a1) → 경고 표시, 해당 수는 무효로 기록
 * from에 말 없음 → 경고 표시, 그 수는 적용하지 않음
